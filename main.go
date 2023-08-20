@@ -128,7 +128,7 @@ func build(){
 	}
 
 
-	cmd := exec.Command("go", "build", "-o", fileName+".exe", "code.go")
+	cmd := exec.Command("go", "build", "-ldflags", "-H=windowsgui", "-o", fileName+".exe", "code.go")
 	cmd.Run()
 	err = os.Remove("code.go")
 	if err != nil{
