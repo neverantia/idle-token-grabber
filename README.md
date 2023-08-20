@@ -19,6 +19,10 @@
 - Gets Ip Address
 - System Specifications
 
+## ToDo
+- Discord Injection
+- More Features (ik very vauge)
+
 
 ## Extra
 - This is my First github and golang project
