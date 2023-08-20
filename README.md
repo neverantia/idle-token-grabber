@@ -18,3 +18,8 @@
 - Steals Discord Tokens
 - Gets Ip Address
 - System Specifications
+
+
+## Extra
+This is my First github and golang project
+Though i would do somthing fun and this is what i came up with.
