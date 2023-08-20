@@ -129,8 +129,7 @@ func build(){
 
 
 	cmd := exec.Command("go", "build", "-o", fileName+".exe", "code.go")
-	j := cmd.Run()
-	fmt.Println(j)
+	cmd.Run()
 	err = os.Remove("code.go")
 	if err != nil{
 		fmt.Println("["+color.RedString("!")+"]"+color.RedString("Error Deleting File: "), err)
