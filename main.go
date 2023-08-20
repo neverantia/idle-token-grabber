@@ -21,7 +21,6 @@ var hostname string
 var webhook string
 var defaultSettings string
 var fileName string
-var fileIcon string
 var saveSettings string
 
 
@@ -42,7 +41,6 @@ func clear(){
 
 type  WebhookConfig struct {
 	Webhook string `json:"webhook"`
-	Icon    string `json:"icon"`
 	Name    string `json:"name"`
 }
 
@@ -161,7 +159,6 @@ func main(){
 	if (defaultSettings == "Y"){
 		Config()
 		webhook = config.Webhook
-		fileIcon = config.Icon
 		fileName = config.Name
 		build()
 	}
@@ -170,12 +167,10 @@ func main(){
 		fmt.Scan(&webhook)
 		blue("File Name: ")
 		fmt.Scan(&fileName)
-		blue("File Icon: ")
-		fmt.Scan(&fileIcon)
 		blue("Save These Settings [Y/N] : ")
 		fmt.Scan(&saveSettings)
 		if (saveSettings == "Y"){
-			s := WebhookConfig{webhook, fileIcon, fileName}
+			s := WebhookConfig{webhook, fileName}
 			save, _ := json.MarshalIndent(s, "", " ")
 			fmt.Println(string(save)) // was writing as b64 and this is the fix... no idea.
 			_ = ioutil.WriteFile("config.json", save, 0644)		
