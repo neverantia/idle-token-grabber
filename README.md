@@ -1,4 +1,6 @@
 ### Idle
+***This Is Still Very Much In Devopment, Once I Have Time I Will Add More.***
+
 
 ## Requirments
 - `Go Added To Path.`
