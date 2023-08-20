@@ -21,5 +21,5 @@
 
 
 ## Extra
-This is my First github and golang project
-Though i would do somthing fun and this is what i came up with.
+- This is my First github and golang project
+- Thought i would do somthing fun and this is what i came up with.
