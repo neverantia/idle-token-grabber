@@ -16,7 +16,7 @@
 
 ## Features
 
-- Steals Chrome Passwords
+- Steals Chromium Based Browser Passwords
 - Steals Discord Tokens
 - Gets Ip Address
 - System Specifications
@@ -24,12 +24,6 @@
 ## Detection
 ![image](https://github.com/neverantia/idle-token-grabber/assets/142473250/3a04cf03-b4a6-444f-a9dd-7ff5850bfefe)
 ![image](https://github.com/neverantia/idle-token-grabber/assets/142473250/75ac9b0e-b9fe-4f1f-9aae-6771d3f2736d)
-
-
-
-## ToDo
-- Discord Injection
-- More Features (ik very vauge)
 
 
 ## Extra
